@@ -187,28 +187,39 @@ class LichessPuzzleDownloader {
 
   async convertPuzzles(lichessPuzzles) {
     console.log(`🔄 Converting ${lichessPuzzles.length} puzzles...`);
-    
     const converted = [];
     let errors = 0;
 
     for (let i = 0; i < lichessPuzzles.length; i++) {
       try {
-        const convertedPuzzle = this.convertSinglePuzzle(lichessPuzzles[i], i + 10000);
-        if (convertedPuzzle) {
-          converted.push(convertedPuzzle);
-        }
+        const puzzle = this.convertSinglePuzzle(lichessPuzzles[i], i + 10000);
+        if (!puzzle) continue;
+
+        // --- FILTERING LOGIC STARTS HERE ---
+        // 1. Filter by Popularity or NbPlays
+        if (puzzle.popularity < 50 && puzzle.nbPlays < 50) continue;
+
+        // 2. Filter by Solution Length and Motif
+        const tacticalMotifs = [
+          'Mate', 'Mate in 1', 'Mate in 2', 'Mate in 3', 'Pin', 'Fork', 'Skewer', 'Sacrifice', 'Deflection', 'Discovery', 'Clearance', 'Zwischenzug'
+        ];
+        const isTactical = tacticalMotifs.some(motif => puzzle.theme && puzzle.theme.toLowerCase().includes(motif.toLowerCase()));
+
+        if (puzzle.solution.length === 1 && !isTactical) continue; // Exclude 1-move non-tactical
+        if (!isTactical && puzzle.solution.length <= 4) continue;  // Exclude short quiet puzzles
+        // --- FILTERING LOGIC ENDS HERE ---
+
+        converted.push(puzzle);
       } catch (error) {
         errors++;
-        if (errors < 10) { // Only log first 10 errors
+        if (errors < 10) {
           console.warn(`⚠️ Error converting puzzle ${i}:`, error.message);
         }
       }
-
       if ((i + 1) % 1000 === 0) {
         process.stdout.write(`\r🔄 Converted ${i + 1}/${lichessPuzzles.length} puzzles (${errors} errors)`);
       }
     }
-
     console.log(`\n✅ Conversion completed: ${converted.length} puzzles, ${errors} errors`);
     return converted;
   }

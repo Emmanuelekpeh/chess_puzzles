@@ -212,3 +212,70 @@
     min-width: 120px;
   }
 }
+
+.puzzle-complete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(44, 62, 80, 0.75);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.puzzle-complete-modal {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.25);
+  padding: 2.5rem 2rem 2rem 2rem;
+  max-width: 400px;
+  width: 90vw;
+  text-align: center;
+  animation: fadeInUp 0.5s;
+}
+
+.puzzle-complete-modal h2 {
+  color: #27ae60;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+}
+
+.puzzle-complete-modal p {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.puzzle-complete-stats {
+  margin-bottom: 1.5rem;
+  text-align: left;
+  font-size: 1.05rem;
+  color: #34495e;
+}
+.puzzle-complete-stats div {
+  margin-bottom: 0.3rem;
+}
+
+.puzzle-complete-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.puzzle-complete-actions .btn {
+  min-width: 120px;
+  font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+  .puzzle-complete-modal {
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+    max-width: 95vw;
+  }
+  .puzzle-complete-modal h2 {
+    font-size: 1.3rem;
+  }
+}
